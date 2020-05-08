@@ -1,4 +1,3 @@
 # Project-NS
-Vytvorenie repository pre project-NS
+Repository pre project-NS
 
-wheatherAus
