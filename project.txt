@@ -1,0 +1,35 @@
+from keras.models import Sequential
+from keras.layers import Dense
+import pandas as pd
+from keras.utils import np_utils
+from keras.utils import to_categorical
+from matplotlib import pyplot as plt
+df=pd.read_csv('pd_speech_features.csv')
+df.head()
+train_X = df.iloc[:,0:755].values
+train_Y = df.iloc[:,1].values
+print(type(df))
+kategoricka_premenna = np_utils.to_categorical(train_Y)
+model = Sequential()
+model.add(Dense(30, input_dim=755, activation='sigmoid'))
+model.add(Dense(30, activation='sigmoid'))
+model.add(Dense(2))
+model.compile(loss='mean_squared_error', optimizer='adam', metrics = ['accuracy'])
+model.fit(train_X, kategoricka_premenna)
+history = model.fit(train_X, kategoricka_premenna,validation_split = 0.1, epochs=25, batch_size=4)
+scores = model.evaluate(train_X, kategoricka_premenna)
+print("\nPresnosť siete %.2f%%" % (scores[1]*100))
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'val'], loc='upper left')
+plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'val'], loc='upper left')
+plt.show()
